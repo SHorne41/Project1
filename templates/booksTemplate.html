@@ -5,5 +5,22 @@
 <html>
 <body>
 
+<h1>{%block heading%}{%endblock%}</h1>
+
+<h2>Author</h2>
+<p>{%block%}{%endblock%}</p>
+
+<h2>Publication Year</h2>
+<p>{%block}{%endblock%}</p>
+
+<h2>ISBN</h2>
+<p>{%block%}{%endblock%}</p>
+
+<h2>Reviews</h2>
+<ul>
+    {%for review in reviews%}
+    <li>review</li>
+    {%end for%}
+</ul>
 </body>
 </html>
