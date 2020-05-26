@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session
+from flask import Flask, session, render_template
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -26,5 +26,5 @@ def index():
     return "Project 1: TODO"
 
 @app.route("/randomBook")
-def index():
+def main():
     return render_template("booksTemplate.html", bookTitle = "Hannibal", authorName = "Thomas Harris", pubYear = "1999", isbn="0385334877", reviews=["Great book", "loved it", "Thrilling"])
