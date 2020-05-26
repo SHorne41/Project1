@@ -5,21 +5,21 @@
 <html>
 <body>
 
-<h1>bookTitle</h1>
+<h1>{{bookTitle}}</h1>
 
 <h2>Author</h2>
-<p>authorName</p>
+<p>{{authorName}}</p>
 
 <h2>Publication Year</h2>
-<p>pubYear</p>
+<p>{{pubYear}}</p>
 
 <h2>ISBN</h2>
-<p>isbn</p>
+<p>{{isbn}}</p>
 
 <h2>Reviews</h2>
 <ul>
     {%for review in reviews%}
-    <li>review</li>
+    <li>{{review}}</li>
     {%endfor%}
 </ul>
 </body>
