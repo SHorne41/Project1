@@ -1,5 +1,9 @@
 {%extends "layout.html"%}
 
 {%block body%}
-
+    <ul>
+        {%for book in books%}
+            <li><p>ISBN: </p>{{book.isbn}}</li>
+        {%endfor%}
+    </ul>
 {%endblock%}

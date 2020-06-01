@@ -27,4 +27,5 @@ def index():
 
 @app.route("/randomBook")
 def main():
-    return render_template("booksTemplate.html", bookTitle = "Hannibal", authorName = "Thomas Harris", pubYear = "1999", isbn="0385334877", reviews=["Great book", "loved it", "Thrilling"])
+    books = db.execute("SELECT isbn, title, author, year FROM books").fetchall()
+    return render_template("index.html", books=books)
