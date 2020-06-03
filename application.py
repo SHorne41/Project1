@@ -25,15 +25,19 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     return render_template("index.html")
 
-@app.route("/search", methods=["POST"])
+@app.route("/searchResults", methods=["POST"])
 def searchDB():
     if request.method == "POST":
         searchParam = request.form.get("choices-single-defaul")
+        searchField = request.form.get("searchField")
         if searchParam == "ISBN":
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = 'searchField.value'").fetchall()
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :searchField",
+            {"searchField": searchField}).fetchall()
         elif searchParam == "Title":
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE title = 'searchField.value'").fetchall()
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
+            {"searchField": searchField}).fetchall()
         else:
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE author = 'searchField.value'").fetchall()
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
+            {"searchField": searchField}).fetchall()
 
     return render_template("searchResult.html", books=books)
