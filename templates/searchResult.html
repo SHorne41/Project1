@@ -5,13 +5,13 @@
 {%endblock%}
 
 {%block body%}
-<table class="table table-striped">
+<table data-toggle="table" class="table table-striped">
     <thead>
         <tr>
-            <th class="text-center"><b>ISBN</b></th>
-            <th class="text-center">Title</th>
-            <th class="text-center">Author</th>
-            <th class="text-center">Publication Year</th>
+            <th data-sortable="true" data-field="ISBN" class="text-center" >ISBN</th>
+            <th data-field="Title" class="text-center" data-sortable="true">Title</th>
+            <th data-field="Author" class="text-center" data-sortable="true">Author</th>
+            <th data-field="Year" class="text-center" data-sortable="true">Publication Year</th>
         </tr>
     </thead>
     <tbody>

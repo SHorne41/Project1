@@ -37,7 +37,7 @@ def searchDB():
             searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
             {"searchField": searchField}).fetchall()
         else:
-            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
+            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE author LIKE :searchField",
             {"searchField": searchField}).fetchall()
 
     return render_template("searchResult.html", searchResults=searchResults)
