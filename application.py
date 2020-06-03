@@ -34,10 +34,10 @@ def searchDB():
             searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :searchField",
             {"searchField": searchField}).fetchall()
         elif searchParam == "Title":
-            searchResult = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
+            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
             {"searchField": searchField}).fetchall()
         else:
-            searchResult = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
+            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
             {"searchField": searchField}).fetchall()
 
     return render_template("searchResult.html", searchResults=searchResults)
