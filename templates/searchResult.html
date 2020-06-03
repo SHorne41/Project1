@@ -5,8 +5,24 @@
 {%endblock%}
 
 {%block body%}
-    <ul>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-center"><b>ISBN</b></th>
+            <th class="text-center">Title</th>
+            <th class="text-center">Author</th>
+            <th class="text-center">Publication Year</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for book in searchResults %}
-        <li><a  href="{{url_for('bookTitle', ISBN = book.isbn)}}">ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</a></li>
+        <tr>
+            <td class="text-center"><a  href="{{url_for('bookTitle', ISBN = book.isbn)}}">{{book.isbn}}</td>
+            <td class="text-center">{{book.title}}</td>
+            <td class="text-center">{{book.author}}</td>
+            <td class="text-center">{{book.year}}</td>
+        </tr>
     {%endfor%}
+    </tbody>
+</table>
 {%endblock%}
