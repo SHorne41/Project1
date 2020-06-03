@@ -5,8 +5,8 @@
 {%endblock%}
 
 {%block body%}
-    {% for book in books %}
-        <p>ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</p>
-        console.log(book)
+    <ul>
+    {% for book in searchResults %}
+        <li><a href="{{url_for('')}}">ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</a></li>
     {%endfor%}
 {%endblock%}

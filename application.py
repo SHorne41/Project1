@@ -31,13 +31,15 @@ def searchDB():
         searchParam = request.form.get("choices-single-defaul")
         searchField = request.form.get("searchField")
         if searchParam == "ISBN":
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :searchField",
+            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :searchField",
             {"searchField": searchField}).fetchall()
         elif searchParam == "Title":
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
+            searchResult = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
             {"searchField": searchField}).fetchall()
         else:
-            books = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
+            searchResult = db.execute("SELECT isbn, title, author, year FROM books WHERE author = :searchField",
             {"searchField": searchField}).fetchall()
 
-    return render_template("searchResult.html", books=books)
+    return render_template("searchResult.html", searchResults=searchResults)
+
+#@app.route("")
