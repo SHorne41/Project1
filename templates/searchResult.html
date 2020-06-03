@@ -1,0 +1,12 @@
+{%extends "layout.html"%}
+
+{%block heading%}
+<h1 style="text-align: center;">Search Results</h1>
+{%endblock%}
+
+{%block body%}
+    {% for book in books %}
+        <p>ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</p>
+        console.log(book)
+    {%endfor%}
+{%endblock%}

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -25,7 +25,15 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     return render_template("index.html")
 
-@app.route("/randomBook")
-def main():
-    books = db.execute("SELECT isbn, title, author, year FROM books").fetchall()
-    return render_template("index.html", books=books)
+@app.route("/search", methods=["POST"])
+def searchDB():
+    if request.method == "POST":
+        searchParam = request.form.get("choices-single-defaul")
+        if searchParam == "ISBN":
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = 'searchField.value'").fetchall()
+        elif searchParam == "Title":
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE title = 'searchField.value'").fetchall()
+        else:
+            books = db.execute("SELECT isbn, title, author, year FROM books WHERE author = 'searchField.value'").fetchall()
+
+    return render_template("searchResult.html", books=books)
