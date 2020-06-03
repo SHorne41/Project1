@@ -7,6 +7,6 @@
 {%block body%}
     <ul>
     {% for book in searchResults %}
-        <li><a href="{{url_for('')}}">ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</a></li>
+        <li><a  href="{{url_for('bookTitle', ISBN = book.isbn)}}">ISBN: {{book.isbn}}, Title: {{book.title}}, Author: {{book.author}}, Published: {{book.year}}</a></li>
     {%endfor%}
 {%endblock%}

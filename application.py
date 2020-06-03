@@ -42,4 +42,9 @@ def searchDB():
 
     return render_template("searchResult.html", searchResults=searchResults)
 
-#@app.route("")
+@app.route("/books/<ISBN>")
+def bookTitle(ISBN):
+
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+    {"isbn": ISBN}).fetchone()
+    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title)
