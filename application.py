@@ -1,4 +1,4 @@
-import os
+import os, requests
 
 from flask import Flask, session, render_template, request
 from flask_session import Session
@@ -47,4 +47,10 @@ def bookTitle(ISBN):
 
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
     {"isbn": ISBN}).fetchone()
-    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title)
+
+    res=requests.get("https://www.goodreads.com/book/review_counts.json", params = {"key": "6RIbwG1Jzy093AMLpfSo1g", "isbns": ISBN})
+    data = res.json()
+    numRatings = data["books"][0]["ratings_count"]
+    avgRating = data["books"][0]["average_rating"]
+
+    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title, avgRating = avgRating, numRatings = numRatings)
