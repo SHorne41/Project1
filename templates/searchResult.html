@@ -1,0 +1,28 @@
+{%extends "layout.html"%}
+
+{%block heading%}
+<h1 style="text-align: center;">Search Results</h1>
+{%endblock%}
+
+{%block body%}
+<table data-toggle="table" class="table table-striped">
+    <thead>
+        <tr>
+            <th data-sortable="true" data-field="ISBN" class="text-center" >ISBN</th>
+            <th data-field="Title" class="text-center" data-sortable="true">Title</th>
+            <th data-field="Author" class="text-center" data-sortable="true">Author</th>
+            <th data-field="Year" class="text-center" data-sortable="true">Publication Year</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for book in searchResults %}
+        <tr>
+            <td class="text-center"><a  href="{{url_for('bookTitle', ISBN = book.isbn)}}">{{book.isbn}}</td>
+            <td class="text-center">{{book.title}}</td>
+            <td class="text-center">{{book.author}}</td>
+            <td class="text-center">{{book.year}}</td>
+        </tr>
+    {%endfor%}
+    </tbody>
+</table>
+{%endblock%}

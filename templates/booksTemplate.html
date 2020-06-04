@@ -1,10 +1,6 @@
-<!doctype html>
-<head>
+{%extends "layout.html"%}
 
-</head>
-<html>
-<body>
-
+{%block body%}
 <h1>{{bookTitle}}</h1>
 
 <h2>Author</h2>
@@ -22,5 +18,4 @@
     <li>{{review}}</li>
     {%endfor%}
 </ul>
-</body>
-</html>
+{%endblock%}

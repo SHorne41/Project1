@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template
+from flask import Flask, session, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -23,8 +23,28 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
 
-@app.route("/randomBook")
-def main():
-    return render_template("booksTemplate.html", bookTitle = "Hannibal", authorName = "Thomas Harris", pubYear = "1999", isbn="0385334877", reviews=["Great book", "loved it", "Thrilling"])
+@app.route("/searchResults", methods=["POST"])
+def searchDB():
+    if request.method == "POST":
+        searchParam = request.form.get("choices-single-defaul")
+        searchField = request.form.get("searchField")
+        if searchParam == "ISBN":
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (isbn) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
+        elif searchParam == "Book Title":
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (title) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
+        else:
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (author) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
+
+    return render_template("searchResult.html", searchResults=searchResults)
+
+@app.route("/books/<ISBN>")
+def bookTitle(ISBN):
+
+    book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+    {"isbn": ISBN}).fetchone()
+    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title)
