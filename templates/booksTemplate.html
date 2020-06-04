@@ -1,18 +1,25 @@
 {%extends "layout.html"%}
 
+{%block heading%}
+<h1 style="text-align: center;"><u>{{bookTitle}}</u></h1>
+
+<h3 style="text-align: center;">{{avgRating}}/5 ({{numRatings}} reviews)</h3>
+{%endblock%}
+
 {%block body%}
-<h1>{{bookTitle}}: {{avgRating}}/5 ({{numRatings}} reviews)</h1>
+<p><b>Author: </b>{{authorName}}</p>
 
-<h2>Author</h2>
-<p>{{authorName}}</p>
+<p><b>Publication Year: </b>{{pubYear}}</p>
 
-<h2>Publication Year</h2>
-<p>{{pubYear}}</p>
+<p><b>ISBN: </b>{{isbn}}</p>
 
-<h2>ISBN</h2>
-<p>{{isbn}}</p>
-
-<h2>Reviews</h2>
+<h2><u>Reviews</u></h2>
+<h3>Write a review</h3>
+<form action="#" method="POST">
+    <textarea name="review" rows="8" cols="80" placeholder="What did yout think?"></textarea>
+    <button type="submit">Submit</button>
+</form>
+<h3>Community Reviews</h3>
 <ul>
     {%for review in reviews%}
     <li>{{review}}</li>
