@@ -20,10 +20,17 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/registration")
+def register():
+    return render_template("registration.html")
+
+@app.route("/search")
+def search():
+    return render_template("search.html")
 
 @app.route("/searchResults", methods=["POST"])
 def searchDB():
