@@ -31,14 +31,14 @@ def searchDB():
         searchParam = request.form.get("choices-single-defaul")
         searchField = request.form.get("searchField")
         if searchParam == "ISBN":
-            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :searchField",
-            {"searchField": searchField}).fetchall()
-        elif searchParam == "Title":
-            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE title = :searchField",
-            {"searchField": searchField}).fetchall()
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (isbn) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
+        elif searchParam == "Book Title":
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (title) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
         else:
-            searchResults = db.execute("SELECT isbn, title, author, year FROM books WHERE author LIKE :searchField",
-            {"searchField": searchField}).fetchall()
+            searchResults = db.execute("SELECT * FROM books WHERE UPPER (author) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).fetchall()
 
     return render_template("searchResult.html", searchResults=searchResults)
 
