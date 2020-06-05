@@ -15,14 +15,14 @@
 
 <h2><u>Reviews</u></h2>
 <h3>Write a review</h3>
-<form action="#" method="POST">
+<form action="{{url_for('createReview', ISBN = isbn)}}" method="POST">
     <textarea name="review" rows="8" cols="80" placeholder="What did yout think?"></textarea>
     <button type="submit">Submit</button>
 </form>
 <h3>Community Reviews</h3>
 <ul>
     {%for review in reviews%}
-    <li>{{review}}</li>
+    <li>{{review.username}}: {{review.review}}</li>
     {%endfor%}
 </ul>
 {%endblock%}

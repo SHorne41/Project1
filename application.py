@@ -74,7 +74,7 @@ def searchDB():
 
     return render_template("searchResult.html", searchResults=searchResults)
 
-@app.route("/books/<ISBN>")
+@app.route("/books/<ISBN>", methods=["GET", "POST"])
 def bookTitle(ISBN):
 
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
@@ -85,4 +85,17 @@ def bookTitle(ISBN):
     numRatings = data["books"][0]["ratings_count"]
     avgRating = data["books"][0]["average_rating"]
 
-    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title, avgRating = avgRating, numRatings = numRatings)
+    reviews = db.execute("SELECT username, review FROM reviews WHERE isbn = :isbn",
+    {"isbn": ISBN}).fetchall()
+
+    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title, avgRating = avgRating, numRatings = numRatings, reviews = reviews)
+
+@app.route("/submitReview/<ISBN>", methods=["POST"])
+def createReview(ISBN):
+    if request.method == "POST":
+        username = session['username']
+        review = request.form.get("review")
+        db.execute("INSERT INTO reviews VALUES (:isbn, :username, :review)",
+        {"isbn": ISBN, "username": username, "review": review})
+        db.commit()
+    return render_template("error.html", message="Review Posted!")
