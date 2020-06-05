@@ -29,10 +29,11 @@ def logout():
         session.pop('username', None)
         return redirect(url_for('index'))
 
+#Login page
 @app.route("/", methods = ['GET', 'POST'])
 def index():
+    session.pop('username', None)
     if request.method == 'POST':
-        session.pop('username', None)
         username = request.form.get("username")
         password = request.form.get("password")
         if db.execute("SELECT * FROM users WHERE username = :username AND password = :password",
@@ -44,11 +45,14 @@ def index():
 
     return render_template("index.html")
 
+#Registration page
 @app.route("/registration", methods = ['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
+
+        #Search DB to see if the username is available
         if db.execute("SELECT username FROM users WHERE username = :username",
         {"username": username}).rowcount == 1:
             return render_template ("error.html", message="Username unavailable")
@@ -60,24 +64,43 @@ def register():
 
     return render_template("registration.html")
 
+#Search page
 @app.route("/searchPage")
 def search():
     return render_template("search.html")
 
+#Search Results page
 @app.route("/searchResults", methods=["POST"])
 def searchDB():
     if request.method == "POST":
         searchParam = request.form.get("choices-single-defaul")
         searchField = request.form.get("searchField")
+
+        #Query database according to search parameter
         if searchParam == "ISBN":
-            searchResults = db.execute("SELECT * FROM books WHERE UPPER (isbn) LIKE UPPER (:searchField)",
-            {"searchField": "%" + searchField + "%" }).fetchall()
+            if db.execute("SELECT * FROM books WHERE UPPER (isbn) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).rowcount > 0:
+                searchResults = db.execute("SELECT * FROM books WHERE UPPER (isbn) LIKE UPPER (:searchField)",
+                {"searchField": "%" + searchField + "%" }).fetchall()
+            else:
+                searchResults = None
         elif searchParam == "Book Title":
-            searchResults = db.execute("SELECT * FROM books WHERE UPPER (title) LIKE UPPER (:searchField)",
-            {"searchField": "%" + searchField + "%" }).fetchall()
+            if db.execute("SELECT * FROM books WHERE UPPER (title) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).rowcount > 0:
+                searchResults = db.execute("SELECT * FROM books WHERE UPPER (title) LIKE UPPER (:searchField)",
+                {"searchField": "%" + searchField + "%" }).fetchall()
+            else:
+                searchResults = None
         else:
-            searchResults = db.execute("SELECT * FROM books WHERE UPPER (author) LIKE UPPER (:searchField)",
-            {"searchField": "%" + searchField + "%" }).fetchall()
+            if db.execute("SELECT * FROM books WHERE UPPER (author) LIKE UPPER (:searchField)",
+            {"searchField": "%" + searchField + "%" }).rowcount > 0:
+                searchResults = db.execute("SELECT * FROM books WHERE UPPER (author) LIKE UPPER (:searchField)",
+                {"searchField": "%" + searchField + "%" }).fetchall()
+            else:
+                searchResults = None
+
+        if searchResults == None:
+            return render_template ("error.html", message="No match found")
 
     return render_template("searchResult.html", searchResults=searchResults)
 
