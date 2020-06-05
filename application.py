@@ -1,6 +1,6 @@
 import os, requests
 
-from flask import Flask, session, render_template, request, url_for, redirect
+from flask import Flask, session, render_template, request, url_for, redirect, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -139,3 +139,27 @@ def createReview(ISBN):
         {"isbn": ISBN, "username": username, "review": review})
         db.commit()
     return render_template("error.html", message="Review Posted!")
+
+
+#API route
+@app.route("/api/<isbn>", methods=["GET"])
+def api(isbn):
+
+    #Retrieve all the information regarding the chosen book
+    bookInfo = db.execute("SELECT * FROM books WHERE isbn = :isbn",
+    {"isbn": isbn}).fetchone()
+    #Retrieving review data from www.goodreads.com
+    res=requests.get("https://www.goodreads.com/book/review_counts.json", params = {"key": "6RIbwG1Jzy093AMLpfSo1g", "isbns": isbn})
+    data = res.json()
+    numRatings = data["books"][0]["ratings_count"]
+    avgRating = data["books"][0]["average_rating"]
+
+    #Returning JSON object
+    return jsonify({
+    "title": bookInfo.title,
+    "author": bookInfo.author,
+    "year": bookInfo.year,
+    "isbn": bookInfo.isbn,
+    "review_count": numRatings,
+    "average_score": avgRating
+    })
