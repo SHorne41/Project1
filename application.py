@@ -20,12 +20,29 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-@app.route("/")
+@app.route("/", methods = ['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        session['username']  = request.form['username']
+        return render_template("search.html")
+
     return render_template("index.html")
 
-@app.route("/registration")
+@app.route("/registration", methods = ['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if db.execute("SELECT username FROM users WHERE username = :username",
+        {"username": username}).rowcount == 1:
+            return render_template ("error.html", message="Username unavailable")
+        else:
+            db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
+            {"username": username, "password": password})
+            db.commit()
+            return render_template ("error.html", message="Registration successful")
+
+
     return render_template("registration.html")
 
 @app.route("/searchPage")
