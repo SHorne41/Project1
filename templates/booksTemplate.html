@@ -16,8 +16,13 @@
 <h2><u>Reviews</u></h2>
 <h3>Write a review</h3>
 <form action="{{url_for('createReview', ISBN = isbn)}}" method="POST">
+    {%if reviewedByUser%}
+    <textarea name="review" rows="8" cols="80" placeholder="Already submitted a review!" disabled></textarea>
+    <button type="submit" disabled>Submit</button>
+    {%else%}
     <textarea name="review" rows="8" cols="80" placeholder="What did yout think?"></textarea>
     <button type="submit">Submit</button>
+    {%endif%}
 </form>
 <h3>Community Reviews</h3>
 <ul>

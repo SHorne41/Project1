@@ -77,18 +77,28 @@ def searchDB():
 @app.route("/books/<ISBN>", methods=["GET", "POST"])
 def bookTitle(ISBN):
 
+    #Retrieving book information from the database
     book = db.execute("SELECT * FROM books WHERE isbn = :isbn",
     {"isbn": ISBN}).fetchone()
 
+    #Retrieving review data from www.goodreads.com
     res=requests.get("https://www.goodreads.com/book/review_counts.json", params = {"key": "6RIbwG1Jzy093AMLpfSo1g", "isbns": ISBN})
     data = res.json()
     numRatings = data["books"][0]["ratings_count"]
     avgRating = data["books"][0]["average_rating"]
 
+    #Grabbing all the reviews from the database for the current book
     reviews = db.execute("SELECT username, review FROM reviews WHERE isbn = :isbn",
     {"isbn": ISBN}).fetchall()
 
-    return render_template("booksTemplate.html", authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title, avgRating = avgRating, numRatings = numRatings, reviews = reviews)
+    #Checking to see if the current user already posted a review for the current book
+    reviewedByUser = False
+    if db.execute("SELECT * FROM reviews WHERE isbn = :isbn AND username = :username",
+    {"isbn": ISBN, "username": session['username']}).rowcount > 0:
+        reviewedByUser = True
+
+    #Generating page for the current book
+    return render_template("booksTemplate.html", reviewedByUser = reviewedByUser, authorName=book.author, pubYear=book.year, isbn=book.isbn, bookTitle=book.title, avgRating = avgRating, numRatings = numRatings, reviews = reviews)
 
 @app.route("/submitReview/<ISBN>", methods=["POST"])
 def createReview(ISBN):
