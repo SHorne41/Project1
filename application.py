@@ -1,11 +1,13 @@
 import os, requests
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
+
+app.secretKey = b'_5#y2L"F4Q8z\n\xec]/'
 
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
@@ -23,8 +25,15 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/", methods = ['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        session['username']  = request.form['username']
-        return render_template("search.html")
+        session.pop('username', None)
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if db.execute("SELECT * FROM users WHERE username = :username AND password = :password",
+        {"username": username, "password": password}).rowcount == 0:
+            return render_template ("error.html", message="Invalid username/password")
+        else:
+            session['username']  = username
+            return render_template("search.html")
 
     return render_template("index.html")
 
@@ -41,7 +50,6 @@ def register():
             {"username": username, "password": password})
             db.commit()
             return render_template ("error.html", message="Registration successful")
-
 
     return render_template("registration.html")
 
