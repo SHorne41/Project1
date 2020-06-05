@@ -1,6 +1,6 @@
 import os, requests
 
-from flask import Flask, session, render_template, request, url_for
+from flask import Flask, session, render_template, request, url_for, redirect
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -33,7 +33,7 @@ def index():
             return render_template ("error.html", message="Invalid username/password")
         else:
             session['username']  = username
-            return render_template("search.html")
+            return redirect(url_for('search'))
 
     return render_template("index.html")
 
