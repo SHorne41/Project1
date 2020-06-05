@@ -22,6 +22,13 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+#Logout route
+@app.route("/logout", methods = ["POST"])
+def logout():
+    if request.method == "POST":
+        session.pop('username', None)
+        return redirect(url_for('index'))
+
 @app.route("/", methods = ['GET', 'POST'])
 def index():
     if request.method == 'POST':
