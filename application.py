@@ -118,7 +118,7 @@ def bookTitle(ISBN):
     avgRating = data["books"][0]["average_rating"]
 
     #Grabbing all the reviews from the database for the current book
-    reviews = db.execute("SELECT username, review FROM reviews WHERE isbn = :isbn",
+    reviews = db.execute("SELECT username, review, rating FROM reviews WHERE isbn = :isbn",
     {"isbn": ISBN}).fetchall()
 
     #Checking to see if the current user already posted a review for the current book
@@ -135,8 +135,9 @@ def createReview(ISBN):
     if request.method == "POST":
         username = session['username']
         review = request.form.get("review")
-        db.execute("INSERT INTO reviews VALUES (:isbn, :username, :review)",
-        {"isbn": ISBN, "username": username, "review": review})
+        rating = request.form.get("rating")
+        db.execute("INSERT INTO reviews VALUES (:isbn, :username, :review, :rating)",
+        {"isbn": ISBN, "username": username, "review": review, "rating": rating})
         db.commit()
     return render_template("error.html", message="Review Posted!")
 

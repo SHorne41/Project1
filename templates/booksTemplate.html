@@ -21,9 +21,11 @@
         <input type="radio" id="rating1" name="rating" value="1" disabled>
         <label for="rating1">1</label>
         <input type="radio" id="rating1" name="rating" value="2" disabled>
+        <label for="rating1">2</label>
         <input type="radio" id="rating1" name="rating" value="3" disabled>
         <label for="rating1">3</label>
         <input type="radio" id="rating1" name="rating" value="4" disabled>
+        <label for="rating1">4</label>
         <input type="radio" id="rating1" name="rating" value="5" disabled>
         <label for="rating1">5</label>
     </div>
@@ -49,7 +51,7 @@
 <h3>Community Reviews</h3>
 <ul>
     {%for review in reviews%}
-    <li>{{review.username}}: {{review.review}}</li>
+    <li>{{review.username}}({{review.rating}}/5): {{review.review}}</li>
     {%endfor%}
 </ul>
 {%endblock%}
