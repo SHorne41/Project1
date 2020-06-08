@@ -17,9 +17,31 @@
 <h3>Write a review</h3>
 <form action="{{url_for('createReview', ISBN = isbn)}}" method="POST">
     {%if reviewedByUser%}
+    <div>
+        <input type="radio" id="rating1" name="rating" value="1" disabled>
+        <label for="rating1">1</label>
+        <input type="radio" id="rating1" name="rating" value="2" disabled>
+        <input type="radio" id="rating1" name="rating" value="3" disabled>
+        <label for="rating1">3</label>
+        <input type="radio" id="rating1" name="rating" value="4" disabled>
+        <input type="radio" id="rating1" name="rating" value="5" disabled>
+        <label for="rating1">5</label>
+    </div>
     <textarea name="review" rows="8" cols="80" placeholder="Already submitted a review!" disabled></textarea>
     <button type="submit" disabled>Submit</button>
     {%else%}
+    <div>
+        <input type="radio" id="rating1" name="rating" value="1">
+        <label for="rating1">1</label>
+        <input type="radio" id="rating1" name="rating" value="2">
+        <label for="rating1">2</label>
+        <input type="radio" id="rating1" name="rating" value="3" checked>
+        <label for="rating1">3</label>
+        <input type="radio" id="rating1" name="rating" value="4">
+        <label for="rating1">4</label>
+        <input type="radio" id="rating1" name="rating" value="5">
+        <label for="rating1">5</label>
+    </div>
     <textarea name="review" rows="8" cols="80" placeholder="What did yout think?"></textarea>
     <button type="submit">Submit</button>
     {%endif%}
