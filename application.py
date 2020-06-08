@@ -65,7 +65,7 @@ def register():
     return render_template("registration.html")
 
 #Search page
-@app.route("/searchPage")
+@app.route("/searchPage", methods=["GET"])
 def search():
     return render_template("search.html")
 

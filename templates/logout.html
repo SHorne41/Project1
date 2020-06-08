@@ -1,5 +1,13 @@
 {%extends "layout.html"%}
 
+{%block home%}
+<div style="position: absolute; top: 0; left: 0;">
+    <form action="{{url_for('search')}}" method="GET">
+        <button type="submit">Return to search page</button>
+    </form>
+</div>
+{%endblock%}
+
 {%block logout%}
 <div style="position: absolute; top: 0; right: 0;">
     <form action="{{url_for('logout')}}" method="POST">
