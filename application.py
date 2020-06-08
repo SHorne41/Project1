@@ -38,7 +38,7 @@ def index():
         password = request.form.get("password")
         if db.execute("SELECT * FROM users WHERE username = :username AND password = :password",
         {"username": username, "password": password}).rowcount == 0:
-            return render_template ("error.html", message="Invalid username/password")
+            return render_template ("error.html", messageHeading = "Login Failed", message="Invalid username/password")
         else:
             session['username']  = username
             return redirect(url_for('search'))
@@ -55,12 +55,12 @@ def register():
         #Search DB to see if the username is available
         if db.execute("SELECT username FROM users WHERE username = :username",
         {"username": username}).rowcount == 1:
-            return render_template ("error.html", message="Username unavailable")
+            return render_template ("error.html", messageHeading = "Registration Failed", message="Username unavailable")
         else:
             db.execute("INSERT INTO users (username, password) VALUES (:username, :password)",
             {"username": username, "password": password})
             db.commit()
-            return render_template ("error.html", message="Registration successful")
+            return render_template ("error.html", messageHeading = "Registration successful!", message="Your account is ready to go.")
 
     return render_template("registration.html")
 
@@ -100,7 +100,7 @@ def searchDB():
                 searchResults = None
 
         if searchResults == None:
-            return render_template ("error.html", message="No match found")
+            return render_template ("error.html", messageHeading = "Error", message="No match found")
 
     return render_template("searchResult.html", searchResults=searchResults)
 
@@ -139,7 +139,7 @@ def createReview(ISBN):
         db.execute("INSERT INTO reviews VALUES (:isbn, :username, :review, :rating)",
         {"isbn": ISBN, "username": username, "review": review, "rating": rating})
         db.commit()
-    return render_template("error.html", message="Review Posted!")
+    return render_template("error.html", messageHeading = "Review Posted!", message="Review successfully posted.")
 
 
 #API route
